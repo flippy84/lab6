@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "libcomponent.h"
 
 #define MAX_R         100000
@@ -14,9 +15,12 @@
 int main(int argc, char * argv[]) {
   int N = (argc > 1) ? atoi(argv[1]) : 5;
 
+  
 
   float *res_array = (float*) malloc(3*sizeof(float)); /* Result array */
   float *rs = (float*) malloc(N*sizeof(float));       /* Resistor values */
+
+  srand(time(NULL));
   
   int i;
   for(i = 0; i < N; ++i) {
