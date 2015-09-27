@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "libresistance.h"
 #include "libcomponent.h"
 #include "libpower.h"
@@ -35,12 +36,11 @@ int main()
     do{
       printf("Please enter connection mode [S | P]: ");
       scanf("%c", &conn);
+      conn = toupper(conn);
       getc(stdin);
     } while (conn != 'S' && conn != 'P');
-    
-    printf("Please enter the current (A): ");
-    scanf("%f", &current);
-    printf("Please enter the number of resistor: ");
+
+    printf("Please enter the number of resistors: ");
     scanf("%d", &num_resistors);
 
     /* Allocate memory for the resistances */
@@ -54,6 +54,7 @@ int main()
 
     /* Calculate the replacement resistance and the different powers. */
     orig_resistance = calc_resistance(num_resistors, conn, resistances);
+    current = volt / orig_resistance;
     power_r = calc_power_r(volt, orig_resistance);
     power_i = calc_power_i(volt, current);
 
@@ -62,26 +63,23 @@ int main()
     num_e12_res = e_resistance(orig_resistance, res_array);
 
     /* The results from all our efforts */
-    printf("The resulting resistance is:            %22.1f Ohm\n",
-	   orig_resistance);
-    printf("The power when using curret is:         %22.2f Ohm\n", power_i);
-    printf("The power when using resistance is:     %22.2f Ohm\n", power_r);
+    printf("The resulting resistance is:            %22.1f Ohm\n", orig_resistance);
+    printf("The resulting current is:               %22.1f Ampere\n", current);
+    printf("The power when using current is:         %22.2f Watt\n", power_i);
+    printf("The power when using resistance is:     %22.2f Watt\n", power_r);
 
     if(num_e12_res > 0)
     {
-      printf("The replacment resistances from the E12 series are: %10.1f",
-	     res_array[0]);
-      if(num_e12_res > 1)
-	printf(", %10.1f", res_array[1]);
-      if(num_e12_res > 2)
-	printf(", %10.1f", res_array[2]);
-      printf(" Ohm\n");      
+        printf("The replacment resistances from the E12 series are: %10.1f", res_array[0]);
+        for(i = 1; i < num_e12_res; i++)
+        {
+            printf(", %10.1f", res_array[i]);
+        }
+        printf(" Ohm\n");      
     }
-
     else
     {
-      printf("%10.1f has no replacment resistances in the E12.",
-	     orig_resistance);
+        printf("%10.1f has no replacment resistances in the E12.", orig_resistance);
     }
     
     /* Free the memory allocate by mallo before. */
