@@ -12,9 +12,9 @@
 #include <stdlib.h>
 #include "libresistance.h"
 #include "libcomponent.h"
-#include "libpower.h"
+//#include "libpower.h"
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     float volt;
     int num_resistors;
@@ -28,39 +28,43 @@ void main(int argc, char *argv[])
     float* res_array = (float*)malloc(sizeof(float) * 3); 
 
     /* Ask for values and read and save them */
-    pintf("Please enter the power supply in voltage\n");
+    printf("Please enter the power supply voltage: ");
     scanf("%f", &volt);
-    printf("Please enter the current.\n");
+    printf("Please enter connection mode[S | P]: ");
+    scanf("%c", &conn);
+    getc(stdin);
+    printf("Please enter the current: ");
     scanf("%f", &current);
-    printf("Please enter the number of resistor.\n");
+    printf("Please enter the number of resistor: ");
     scanf("%d", &num_resistors);
 
     /* Allocate memory for the resistances */
     float* resistances = malloc(sizeof(float) * num_resistors);
 
-    for (i = 1; i < num_resistors + 1, i++)
+    for (i = 1; i < num_resistors + 1; i++)
     {
-        printf("Please enter resistance for component %d\n", i);
-        scanf("%d", &resistances[i-1]);
+        printf("Please enter resistance for component %d: ", i);
+        scanf("%f", &resistances[i-1]);
     }
 
     /* Calculate the replacement resistance and the different powers. */
     orig_resistance = calc_resistance(num_resistors, conn, resistances);
-    power_r = calc_power_r(volt, orig_Resistance);
-    power_i = calc_power_i(volt, current);
+    //  power_r = calc_power_r(volt, orig_Resistance);
+    //power_i = calc_power_i(volt, current);
 
     /* Calculate the three resistances from the E12 series that are needed to 
        replace the orig_resistance. */
     num_e12_res = e_resistance(orig_resistance, res_array);
 
     /* The results from all our efforts */
-    printf("The resulting resistance is: %12.1f\n", orig_resistance);
-    printf("The power when using curret is: %12.2f\n", power_i);
-    printf("The power when using resistance is: %12.2f\n", power_r);
+    printf("The resulting resistance is:            %12.1f\n", orig_resistance);
+    printf("The power when using curret is:         %12.2f\n", power_i);
+    printf("The power when using resistance is:     %12.2f\n", power_r);
     printf("The resistances from the E12 series are: %10.1f, %10.1f, %10.1f\n", res_array[0], res_array[1], res_array[2]);
 
     /* Free the memory allocate by mallo before. */
     free(resistances);
     free(res_array);
 
+    return 0;
 }
