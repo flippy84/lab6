@@ -37,7 +37,6 @@ INCLUDES := $(addprefix -I, $(LIB_NAMES))
 $(shell mkdir -p $(LIB_DIR))
 $(shell mkdir -p $(OBJ_DIR))
 
-
 # Phony targets
 .PHONY: all
 all: $(OBJS) $(LIBS) $(BINS)
