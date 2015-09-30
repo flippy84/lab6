@@ -8,7 +8,7 @@ CC := gcc
 C_FLAGS := -Wall -Wextra -std=c99
 
 APP_NAME ?= electrotest
-LIB_NAMES := libcomponent libresistance
+LIB_NAMES := libcomponent libresistance libpower
 
 # Directories
 LIB_DIR ?= lib
