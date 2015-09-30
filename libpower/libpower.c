@@ -5,6 +5,7 @@
  * libpower.c: this file contains two functions, one for calculating the power 
  * given the resistance and one for calculating the power given the current. 
  */
+#include <stdio.h>       /* printf */
 #include "libpower.h"
 
 float calc_power_r(float volt, float resistance)
