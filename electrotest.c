@@ -64,7 +64,7 @@ int main()
 
     /* The results from all our efforts */
     printf("The resulting resistance is:            %22.1f Ohm\n", orig_resistance);
-    printf("The resulting current is:               %22.1f Ampere\n", current);
+    printf("The resulting current is:               %22.3f Ampere\n", current);
     printf("The power when using current is:         %22.2f Watt\n", power_i);
     printf("The power when using resistance is:     %22.2f Watt\n", power_r);
 
