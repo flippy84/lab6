@@ -44,14 +44,13 @@ all: $(OBJS) $(LIBS) $(BINS)
 .PHONY: lib
 lib: $(OBJS) $(LIBS)
 
-
 .PHONY: install
 install:
-	sudo $(MAKE) all LIB_DIR=$(USR_LIB) BIN_DIR=$(USR_BIN)
+	$(MAKE) all LIB_DIR=$(USR_LIB) BIN_DIR=$(USR_BIN)
 
 .PHONY: uninstall
 uninstall:
-	sudo $(MAKE) clean BIN_DIR=$(USR_BIN) LIB_DIR=$(USR_LIB)
+	$(MAKE) clean BIN_DIR=$(USR_BIN) LIB_DIR=$(USR_LIB)
 
 .PHONY: clean
 clean:
@@ -59,19 +58,21 @@ clean:
 	rm -f $(LIBS)
 	rm -f $(BINS)
 
-
 # Real targets
 $(BIN_DIR)/%: %.c
+ifeq ($(LIB_DIR),$(USR_LIB))
+	$(CC) $(C_FLAGS) -o $@ $< \
+	$(INCLUDES) $(LINK_LIBS)
+else
 	$(CC) $(C_FLAGS) -o $@ $< -L$(LIB_DIR) \
-		$(INCLUDES) $(LINK_LIBS) -Wl,-rpath,$(LIB_DIR)
+	$(INCLUDES) $(LINK_LIBS) -Wl,-rpath,$(LIB_DIR)
+endif
 
 $(OBJ_DIR)/%.o: libcomponent/%.c libcomponent/%.h 
 	$(CC) $(C_FLAGS) -fPIC -c -o $@ $<
 
-
 $(OBJ_DIR)/%.o: libresistance/%.c libresistance/%.h 
 	$(CC) $(C_FLAGS) -fPIC -c -o $@ $<
-
 
 $(OBJ_DIR)/%.o: libpower/%.c libpower/%.h
 	$(CC) $(C_FLAGS) -fPIC -c -o $@ $<
